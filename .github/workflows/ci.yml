@@ -1,4 +1,3 @@
-# .github/workflows/ci.yml
 name: Node.js CI
 
 on:
@@ -27,6 +26,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
+      - name: Fix Mocha permission issue
+        run: chmod +x ./node_modules/.bin/mocha
+
       - name: Run tests
         run: npx mocha
-
