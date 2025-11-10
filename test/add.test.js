@@ -1,13 +1,19 @@
-// test/add.test.js
-const assert = require("assert");
-const add = require("../index");
+// test/app.test.js
+const request = require("supertest");
+const app = require("../index");
 
-describe("Addition function", () => {
-  it("should return 5 when 2 + 3", () => {
-    assert.strictEqual(add(2, 3), 5);
+describe("API Tests", () => {
+  it("should return hello message", async () => {
+    const res = await request(app).get("/");
+    if (res.status !== 200 || !res.text.includes("Hello")) {
+      throw new Error("Root route failed");
+    }
   });
 
-  it("should return 0 when -1 + 1", () => {
-    assert.strictEqual(add(-1, 1), 0);
+  it("should correctly add two numbers", async () => {
+    const res = await request(app).get("/add/5/7");
+    if (res.body.result !== 12) {
+      throw new Error("Addition route failed");
+    }
   });
 });

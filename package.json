@@ -6,6 +6,10 @@
     "test": "npx mocha"
   },
   "devDependencies": {
-    "mocha": "^11.7.5"
+    "mocha": "^11.7.5",
+    "supertest": "^7.1.4"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
   }
 }
