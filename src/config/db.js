@@ -1,13 +1,14 @@
 const mysql = require("mysql2");
 
-// Use environment variables in CI, fallback to local defaults
+// ✅ Create MySQL connection
 const db = mysql.createConnection({
-  host: process.env.DB_HOST || "localhost",
-  user: process.env.DB_USER || "root",
-  password: process.env.DB_PASSWORD || "",
-  database: process.env.DB_NAME || "crud_db",
+  host: "localhost",
+  user: "root",        // 👈 your MySQL username
+  password: "",        // 👈 your MySQL password
+  database: "crud_db", // 👈 your database name
 });
 
+// ✅ Connect to MySQL
 db.connect(err => {
   if (err) {
     console.error("❌ MySQL connection failed:", err);
