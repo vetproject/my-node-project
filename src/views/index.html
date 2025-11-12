@@ -1,47 +1,130 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Product List</title>
-  <script src="../models/userModel.js"></script>
+  <title>User List</title>
+  <script defer src="../models/userModel.js"></script>
   <style>
     body {
-      font-family: Arial, sans-serif;
-      background: #f8f9fa;
+      font-family: 'Segoe UI', sans-serif;
+      background: #f0f2f5;
+      margin: 0;
       padding: 20px;
     }
+
     h1 {
+      text-align: center;
       color: #333;
     }
-    .product-list {
+
+    #views {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-      gap: 15px;
-      margin-top: 20px;
+      grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+      gap: 20px;
+      max-width: 1000px;
+      margin: auto;
     }
+
     .product {
       background: white;
+      border-radius: 10px;
       padding: 15px;
-      border-radius: 8px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      text-align: center;
+    }
+
+    .product:hover {
+      transform: scale(1.05);
       transition: 0.3s;
     }
-    .product:hover {
-      transform: scale(1.03);
-    }
-    .product h3 {
-      margin: 0;
-      color: #007bff;
-    }
-    .product p {
-      margin: 5px 0 0;
-      color: #555;
+
+    button {
+      margin-top: 5px;
+      padding: 5px 10px;
     }
   </style>
 </head>
+
 <body>
-  <h1>🛒 Product List</h1>
-  <div id="views" class="product-list"></div>
+
+  <h1>👥 User Management</h1>
+
+  <form id="addForm" style="text-align:center; margin-bottom:20px;">
+    <input type="text" id="name" placeholder="Enter name" required>
+    <button type="submit">Add User</button>
+  </form>
+
+  <div id="views"></div>
+
+  <script>
+    const API_URL = "http://localhost:3000/api/users";
+    const container = document.getElementById("views");
+    const form = document.getElementById("addForm");
+
+    // ✅ Load all users
+    async function fetchUsers() {
+      container.innerHTML = "<p>Loading...</p>";
+      try {
+        const res = await fetch(API_URL);
+        const users = await res.json();
+        container.innerHTML = "";
+        users.forEach(renderUser);
+      } catch {
+        container.innerHTML = "<p style='color:red;'>Failed to load users.</p>";
+      }
+    }
+
+    // ✅ Render single user card
+    function renderUser(user) {
+      const div = document.createElement("div");
+      div.className = "product";
+      div.innerHTML = `
+    <h3>${user.name}</h3>
+    <p>ID: ${user.id}</p>
+    <button onclick="deleteUser(${user.id})">Delete</button>
+    <button onclick="editUser(${user.id}, '${user.name}')">Edit</button>
+  `;
+      container.appendChild(div);
+    }
+
+    // ✅ Add user
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      if (!name) return alert("Enter name");
+
+      await fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name }),
+      });
+      form.reset();
+      fetchUsers();
+    });
+
+    // ✅ Delete user
+    async function deleteUser(id) {
+      await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+      fetchUsers();
+    }
+
+    // ✅ Edit user
+    async function editUser(id, oldName) {
+      const newName = prompt("Edit name:", oldName);
+      if (!newName || newName === oldName) return;
+      await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: newName }),
+      });
+      fetchUsers();
+    }
+
+    // Load on start
+    window.addEventListener("DOMContentLoaded", fetchUsers);
+  </script>
 </body>
+
 </html>

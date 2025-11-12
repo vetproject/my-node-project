@@ -19,6 +19,9 @@ app.use("/api/users", userRoutes);
 const productRoutes = require("./routes/productRoutes");
 app.use("/api/products", productRoutes);
 
+const categoryRoutes = require("./routes/categoriesRouter");
+app.use("/api/categories", categoryRoutes);
+
 // Root endpoint
 app.get("/", (req, res) => {
   res.send("✅ Welcome to the Real Node.js API!");

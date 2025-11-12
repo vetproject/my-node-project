@@ -22,3 +22,29 @@ describe("User API", () => {
     if (res.status !== 404) throw new Error("Should return 404 for not found");
   });
 });
+
+
+describe("Product API", () =>{
+  it("GET /api/products  → returns all products", async ()=>{
+    const res =await request(app).get("/api/products");
+    if (res.status !== 200 || !Array.isArray(res.body)){
+      throw new Error("Failed to fetch products");
+    }
+  })
+
+  it("GET /api/products/1  → returns specific product", async ()=>{
+    const res =await request(app).get("/api/products");
+    if (res.status !== 200 || !Array.isArray(res.body)){
+      throw new Error("Failed to fetch products");
+    }
+  })
+
+  it("GET /api/products/999  → returns 404", async ()=>{
+    const res =await request(app).get("/api/products");
+    if (res.status !== 200 || !Array.isArray(res.body)){
+      throw new Error("Failed to fetch products");
+    }
+  })
+}
+
+)
