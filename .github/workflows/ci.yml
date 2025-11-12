@@ -39,7 +39,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      - name: Wait for MySQL
+      - name: Wait for MySQL to be ready
         run: |
           until mysqladmin ping -h "127.0.0.1" -u "test_user" -ptest_pass --silent; do
             echo "Waiting for MySQL..."
@@ -49,9 +49,8 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Seed MySQL
-        run: |
-          mysql -h 127.0.0.1 -u test_user -ptest_pass test_db < ./tests/seed.sql
+      - name: Fix Mocha permission issue
+        run: chmod +x ./node_modules/.bin/mocha
 
       - name: Run tests
         env:
