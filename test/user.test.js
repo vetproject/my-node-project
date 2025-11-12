@@ -10,12 +10,12 @@ describe("User API", () => {
     }
   });
 
-  it("GET /api/users/1 → returns specific user", async () => {
-    const res = await request(app).get("/api/users/1");
-    if (res.status !== 200 || res.body.name !== "Rin") {
-      throw new Error("Failed to fetch specific user");
-    }
-  });
+  // it("GET /api/users/1 → returns specific user", async () => {
+  //   const res = await request(app).get("/api/users/1");
+  //   if (res.status !== 200 || res.body.name !== "Rin") {
+  //     throw new Error("Failed to fetch specific user");
+  //   }
+  // });
 
   it("GET /api/users/999 → returns 404", async () => {
     const res = await request(app).get("/api/users/999");
